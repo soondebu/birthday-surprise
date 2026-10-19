@@ -1,0 +1,530 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생일 축하해 💗</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Malgun Gothic", sans-serif;
+  color: #794b61;
+  text-align: center;
+  background: linear-gradient(135deg, #ffe0ed, #fff5f9, #ffd7e8);
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.screen {
+  min-height: 100vh;
+  padding: 35px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hidden {
+  display: none !important;
+}
+
+h1 {
+  font-size: clamp(26px, 6vw, 38px);
+}
+
+p {
+  line-height: 1.7;
+}
+
+.main-btn,
+.back-btn {
+  border: none;
+  border-radius: 24px;
+  padding: 13px 25px;
+  font-size: 17px;
+  background: #ff8fba;
+  color: white;
+  box-shadow: 0 4px 10px #e8b3c9;
+}
+
+.back-btn {
+  margin-top: 25px;
+  background: #d99bb6;
+}
+
+#questionCat,
+#loveCat {
+  font-size: 95px;
+  margin: 12px;
+  transition: 0.5s;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 20px;
+  min-height: 55px;
+}
+
+#noBtn {
+  border: none;
+  border-radius: 24px;
+  padding: 13px 24px;
+  color: white;
+  background: #bda8b2;
+  font-size: 17px;
+  transition: 0.25s;
+}
+
+#loveMessage {
+  transition: 1s;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(-80px);
+  pointer-events: none;
+}
+
+#birthdayContent {
+  width: 100%;
+  max-width: 650px;
+  opacity: 0;
+  transform: translateY(70px);
+  transition: 1s;
+}
+
+#birthdayContent.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cake {
+  font-size: 95px;
+}
+
+.bouquet {
+  font-size: 38px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.gifts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.gift {
+  background: #fff8fb;
+  border: 2px solid #ffc0d7;
+  border-radius: 20px;
+  padding: 18px 6px;
+  min-height: 145px;
+  color: #92516f;
+  box-shadow: 0 6px 14px #d9a5bd70;
+  transition: transform 0.2s;
+}
+
+.gift:hover {
+  transform: translateY(-5px);
+}
+
+.gift-icon {
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.gift-label {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.page-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 25px 20px;
+  border: 2px solid #ffd0e1;
+  border-radius: 25px;
+  background: #fff8fbdd;
+  box-shadow: 0 8px 25px #d99bb633;
+}
+
+.page-icon {
+  font-size: 65px;
+}
+
+.letter {
+  text-align: left;
+  white-space: pre-wrap;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+.youtube-player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 20px auto 10px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #f7dce7;
+}
+
+.youtube-player iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+.music-caption {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.music-note {
+  font-size: 14px;
+  color: #987487;
+}
+
+.wish-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.wish-card {
+  min-height: 105px;
+  border: 2px dashed #ef9cbe;
+  border-radius: 17px;
+  background: #fff0f6;
+  color: #c75f8c;
+  font-size: 21px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.wish-card.used {
+  background: #eee7eb;
+  color: #998b93;
+  border-color: #d3c4cc;
+}
+
+#floatingHearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heart {
+  position: absolute;
+  bottom: -40px;
+  animation: floatUp 8s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0) rotate(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(-110vh) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .gifts {
+    gap: 8px;
+  }
+
+  .gift {
+    min-height: 120px;
+  }
+
+  .gift-icon {
+    font-size: 38px;
+  }
+
+  .gift-label {
+    font-size: 13px;
+  }
+
+  .cake {
+    font-size: 75px;
+  }
+
+  #questionCat,
+  #loveCat {
+    font-size: 82px;
+  }
+
+  .page-card {
+    padding: 22px 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="floatingHearts"></div>
+
+<!-- 첫 번째 화면 -->
+<section id="questionScreen" class="screen">
+  <div id="questionCat">🐱</div>
+  <h1>나 좋아해?</h1>
+  <p id="questionHint">솔직하게 골라 봐 💗</p>
+
+  <div class="buttons">
+    <button class="main-btn" onclick="sayYes()">응! 💗</button>
+    <button id="noBtn" onclick="sayNo()">아니</button>
+  </div>
+</section>
+
+<!-- 두 번째 화면: 생일과 선물상자 -->
+<section id="birthdayScreen" class="screen hidden">
+  <div id="loveMessage">
+    <div id="loveCat">😻</div>
+    <h1>나도 너 좋아해 💗</h1>
+  </div>
+
+  <div id="birthdayContent">
+    <div>
+      <span class="bouquet">💐</span>
+      <span class="cake">🎂</span>
+      <span class="bouquet">💐</span>
+    </div>
+
+    <h1>생일 축하해! 🎉</h1>
+    <p>오늘 하루 행복하게 보내 💕</p>
+    <p>선물상자를 하나씩 열어 봐!</p>
+
+    <div class="gifts">
+  <button class="gift" onclick="showPage('wishPage')">
+    <span class="gift-icon">🎁</span>
+    <span class="gift-label">첫 번째 선물</span>
+  </button>
+
+  <button class="gift" onclick="showPage('musicPage')">
+    <span class="gift-icon">🎁</span>
+    <span class="gift-label">두 번째 선물</span>
+  </button>
+
+  <button class="gift" onclick="showPage('letterPage')">
+    <span class="gift-icon">🎁</span>
+    <span class="gift-label">세 번째 선물</span>
+  </button>
+</div>
+  </div>
+</section>
+
+<!-- 세 번째 화면: 편지 -->
+<section id="letterPage" class="screen hidden">
+  <div class="page-card">
+    <div class="page-icon">💌</div>
+    <h1>너에게 쓰는 편지</h1>
+    <div id="letterText" class="letter"></div>
+  </div>
+
+  <button class="back-btn" onclick="showPage('birthdayScreen')">
+    ← 선물 화면으로
+  </button>
+</section>
+
+<!-- 네 번째 화면: 음악 -->
+<section id="musicPage" class="screen hidden">
+  <div class="page-card">
+    <div class="page-icon">🎵</div>
+    <h1>너를 위한 음악</h1>
+    <p>너를 생각하며 준비한 노래 💗</p>
+
+    <div class="youtube-player">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/JLT8qOdpDPM?playsinline=1"
+        title="적재 - 별 보러 가자"
+        allow="autoplay; encrypted-media; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <p class="music-caption">적재 - 별 보러 가자</p>
+    <p class="music-note">
+      영상 가운데 재생 버튼을 누르면 음악이 시작돼.
+    </p>
+  </div>
+
+  <button class="back-btn" onclick="showPage('birthdayScreen')">
+    ← 선물 화면으로
+  </button>
+</section>
+
+<!-- 다섯 번째 화면: 소원권 -->
+<section id="wishPage" class="screen hidden">
+  <div class="page-card">
+    <div class="page-icon">🎀</div>
+    <h1>소원권 6개</h1>
+    <p>사용할 소원권을 눌러 봐 💗</p>
+
+    <div id="wishGrid" class="wish-grid"></div>
+
+    <p>서로의 안전과 편안함을 존중하는 소원으로 사용해 줘.</p>
+  </div>
+
+  <button class="back-btn" onclick="showPage('birthdayScreen')">
+    ← 선물 화면으로
+  </button>
+</section>
+
+<script>
+/* 편지 내용 */
+const MY_LETTER = `생일 축하해 ❤️ 
+
+너를 처음 만났던 순간부터 지금까지 함께한 시간들을 생각하면 참 신기하고 고마워. 
+우리가 함께 웃고, 이야기하고, 사소한 일들을 나누는 순간들이 나한테는 생각보다 훨씬 큰 의미가 있어. 
+
+너와 연락하는 평범한 하루도, 자고 일어나서 연락하는 것도 나에겐 소중한 추억이야. 
+별거 아닌 것처럼 지나가는 순간들도 너와 함께라서 더 특별하게 느껴지는 것 같아. 
+
+내가 항상 내 마음을 완벽하게 표현하지는 못하겠지만, 너가 나한테 얼마나 소중한 사람인지 꼭 알아줬으면 좋겠어. 
+네가 행복할 때 같이 웃어 주고, 힘든 일이 있을 때 네 이야기를 들어 주고, 앞으로도 서로에게 좋은 사람이 되어 주고 싶어. 
+
+오늘은 네가 태어난 특별한 날이니까 누구보다 많이 웃고 행복했으면 좋겠어. 
+네가 좋아하는 것들로 가득한 하루가 되었으면 좋겠고, 앞으로의 날들도 좋은 기억들로 채워졌으면 좋겠어. 
+
+앞으로 우리에게 어떤 순간들이 찾아올지는 모르지만, 지금처럼 서로를 아껴 주면서 예쁜 추억들을 많이 만들어 가자. 
+
+내 일상에 와 줘서 고마워. 
+그리고 태어나 줘서 고마워. 
+
+진심으로 생일 축하해. ❤️ 
+
+— 너를 소중하게 생각하는 사람이`;
+
+document.getElementById("letterText").textContent = MY_LETTER;
+
+/* 화면 전환 */
+const pageIds = [
+  "questionScreen",
+  "birthdayScreen",
+  "letterPage",
+  "musicPage",
+  "wishPage"
+];
+
+function showPage(pageId) {
+  pageIds.forEach(id => {
+    document.getElementById(id).classList.add("hidden");
+  });
+
+  document.getElementById(pageId).classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* 아니 버튼 */
+let noClicks = 0;
+
+const questionCat = document.getElementById("questionCat");
+const questionHint = document.getElementById("questionHint");
+const noButton = document.getElementById("noBtn");
+
+function sayNo() {
+  noClicks++;
+
+  if (noClicks === 1) {
+    questionHint.textContent = "다시 한번 골라 봐!";
+    questionCat.textContent = "🙁";
+    noButton.style.transform = "scale(0.8)";
+  } else if (noClicks === 2) {
+    questionHint.textContent = "정말 확실해?";
+    questionCat.textContent = "😿";
+    noButton.style.transform = "scale(0.55)";
+  } else {
+    questionHint.textContent = "마지막 기회야!";
+    questionCat.textContent = "😾";
+    noButton.remove();
+  }
+}
+
+/* 좋아해 버튼 */
+function sayYes() {
+  showPage("birthdayScreen");
+
+  document.getElementById("loveMessage").classList.remove("fade-up");
+  document.getElementById("birthdayContent").classList.remove("show");
+
+  setTimeout(() => {
+    document.getElementById("loveMessage").classList.add("fade-up");
+  }, 1800);
+
+  setTimeout(() => {
+    document.getElementById("birthdayContent").classList.add("show");
+  }, 2300);
+}
+
+/* 소원권 6개 */
+const wishGrid = document.getElementById("wishGrid");
+
+for (let i = 0; i < 6; i++) {
+  const card = document.createElement("button");
+  card.className = "wish-card";
+  card.textContent = "소원권";
+
+  card.addEventListener("click", () => {
+    if (card.classList.contains("used")) {
+      alert("이미 사용한 소원권이야.");
+      return;
+    }
+
+    if (confirm("이 소원권을 사용할까?")) {
+      card.classList.add("used");
+      card.textContent = "사용 완료";
+    }
+  });
+
+  wishGrid.appendChild(card);
+}
+
+/* 떠다니는 하트 */
+const floatingHearts = document.getElementById("floatingHearts");
+
+for (let i = 0; i < 18; i++) {
+  const heart = document.createElement("span");
+  heart.className = "heart";
+  heart.textContent = ["💗", "💕", "♡", "💖"][i % 4];
+  heart.style.left = Math.random() * 100 + "%";
+  heart.style.animationDelay = Math.random() * 8 + "s";
+  heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+  heart.style.fontSize = (16 + Math.random() * 20) + "px";
+  floatingHearts.appendChild(heart);
+}
+</script>
+
+</body>
+</html>
