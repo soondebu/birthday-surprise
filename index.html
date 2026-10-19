@@ -294,9 +294,48 @@ p {
 <body>
 
 <div id="floatingHearts"></div>
+  <!-- 생일 확인 화면 -->
+<section id="passwordScreen" class="screen">
+  <div class="page-card">
+    <div class="page-icon">🎂</div>
+
+    <h1>예쁘고 귀여운 사람의 생일을 적으십시오</h1>
+
+    <p>생년월일을 입력해 주세요 💗</p>
+
+    <div style="display:flex; gap:8px; justify-content:center; margin:20px 0;">
+      <input
+        id="birthYear"
+        type="number"
+        placeholder="2012"
+        style="width:90px; padding:12px 5px; border:2px solid #ffc0d7; border-radius:12px; text-align:center; font-size:16px;"
+      >
+
+      <input
+        id="birthMonth"
+        type="number"
+        placeholder="11"
+        style="width:70px; padding:12px 5px; border:2px solid #ffc0d7; border-radius:12px; text-align:center; font-size:16px;"
+      >
+
+      <input
+        id="birthDay"
+        type="number"
+        placeholder="07"
+        style="width:70px; padding:12px 5px; border:2px solid #ffc0d7; border-radius:12px; text-align:center; font-size:16px;"
+      >
+    </div>
+
+    <button class="main-btn" onclick="checkBirthday()">
+      확인하기 💗
+    </button>
+
+    <p id="birthError" style="color:#d94b79; font-weight:bold;"></p>
+  </div>
+</section>
 
 <!-- 첫 번째 화면 -->
-<section id="questionScreen" class="screen">
+<section id="questionScreen" class="screen hidden">
   <div id="questionCat">🐱</div>
   <h1>나 좋아해?</h1>
   <p id="questionHint">솔직하게 골라 봐 💗</p>
@@ -428,7 +467,23 @@ const MY_LETTER = `생일 축하해 ❤️
 — 너를 소중하게 생각하는 사람이`;
 
 document.getElementById("letterText").textContent = MY_LETTER;
+/* 생일 확인 */
+function checkBirthday() {
+  const year = document.getElementById("birthYear").value;
+  const month = document.getElementById("birthMonth").value;
+  const day = document.getElementById("birthDay").value;
 
+  if (
+    year === "2012" &&
+    month === "11" &&
+    day === "7"
+  ) {
+    document.getElementById("passwordScreen").classList.add("hidden");
+    document.getElementById("questionScreen").classList.remove("hidden");
+  } else {
+    document.getElementById("birthError").textContent = "틀렸읍니다";
+  }
+}
 /* 화면 전환 */
 const pageIds = [
   "questionScreen",
